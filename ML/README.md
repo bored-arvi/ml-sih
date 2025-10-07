@@ -46,6 +46,26 @@ Prereqs: A GitHub repo with this project.
 
 Note: If your pipeline requires assets (e.g., `.pkl`, `.faiss`, reference images), commit them or store in a cloud bucket your code can read at runtime.
 
+### Deploy to Vercel (serverless)
+Prereqs: Vercel account and Vercel CLI (optional but recommended). This project includes `api/index.py` and `vercel.json` for Python serverless.
+
+1. Push your repo to GitHub/GitLab.
+2. Ensure at repo root:
+   - `api/index.py` (imports `app` from `ML.server`)
+   - `vercel.json` (routes all traffic to `api/index.py`, sets `UPLOAD_DIR=/tmp/uploads`)
+   - `requirements.txt` (root) and `ML/requirements.txt`
+3. Import the repo in Vercel → New Project.
+4. Framework Preset: Other. Vercel detects `@vercel/python` from `vercel.json`.
+5. Environment variables (optional): add any keys your `verify.py` needs. `UPLOAD_DIR` is already set to `/tmp/uploads`.
+6. Deploy.
+7. Test endpoints:
+   - GET `https://<your-project>.vercel.app/health`
+   - POST `https://<your-project>.vercel.app/api/verify`
+
+Notes:
+- Serverless filesystems are ephemeral; results go to `/tmp/uploads` and vanish between invocations. Persist to external storage if needed.
+- Cold starts may affect first request latency.
+
 ### verify.py integration
 Place your pipeline at `ML/verify.py` with the following functions:
 ```text

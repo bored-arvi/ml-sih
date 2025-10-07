@@ -15,7 +15,9 @@ from .verify_adapter import (
 )
 
 BASE_DIR = Path(__file__).resolve().parent
-UPLOAD_DIR = BASE_DIR / "uploads"
+# Allow overriding uploads directory via env (useful for serverless: set to /tmp/uploads)
+uploads_root = os.environ.get("UPLOAD_DIR")
+UPLOAD_DIR = Path(uploads_root) if uploads_root else (BASE_DIR / "uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(title="ML Verification API", version="1.0.0")
