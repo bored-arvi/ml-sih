@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ml-verify-api
+    env: python
+    plan: free
+    buildCommand: pip install -r ML/requirements.txt && pip install fastapi uvicorn[standard] python-multipart
+    startCommand: uvicorn ML.server:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: UVICORN_WORKERS
+        value: "1"
+
