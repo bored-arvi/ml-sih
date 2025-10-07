@@ -94,5 +94,3 @@ def serve_heatmap(filename):
         return send_file(path, mimetype='image/png')
     return "Not found", 404
 
-if __name__ == "__main__":
-    app.run(debug=True, port=8000)
